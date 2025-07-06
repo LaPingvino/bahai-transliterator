@@ -1,0 +1,674 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Persian to Bahá'í transliteration dictionary with ezafe rules and vowel patterns",
+    "last_updated": "2024-12-19"
+  },
+  "common_words": {
+    "خدا": {
+      "transliteration": "Khudá",
+      "category": "divine_name",
+      "notes": "Always capitalized"
+    },
+    "خداوند": {
+      "transliteration": "Khudávand",
+      "category": "divine_name",
+      "notes": "Lord, always capitalized"
+    },
+    "پروردگار": {
+      "transliteration": "Parvardigár",
+      "category": "divine_name",
+      "notes": "Cherisher, always capitalized"
+    },
+    "الهی": {
+      "transliteration": "Iláhí",
+      "category": "divine_term",
+      "notes": "My God, capitalized"
+    },
+    "الها": {
+      "transliteration": "Iláhá",
+      "category": "divine_term",
+      "notes": "O God, capitalized"
+    },
+    "معبود": {
+      "transliteration": "ma'búd",
+      "category": "divine_term",
+      "notes": "Worshipped one"
+    },
+    "معبودا": {
+      "transliteration": "ma'búdan",
+      "category": "divine_term",
+      "notes": "O worshipped one"
+    },
+    "مقصود": {
+      "transliteration": "maqṣúd",
+      "category": "divine_term",
+      "notes": "Desired one"
+    },
+    "مقصودا": {
+      "transliteration": "maqṣúdan",
+      "category": "divine_term",
+      "notes": "O desired one"
+    },
+    "ملک": {
+      "transliteration": "malik",
+      "category": "divine_term",
+      "notes": "King"
+    },
+    "ملکا": {
+      "transliteration": "malikan",
+      "category": "divine_term",
+      "notes": "O King"
+    },
+    "از": {
+      "transliteration": "az",
+      "category": "preposition"
+    },
+    "به": {
+      "transliteration": "bih",
+      "category": "preposition"
+    },
+    "در": {
+      "transliteration": "dar",
+      "category": "preposition"
+    },
+    "تا": {
+      "transliteration": "tá",
+      "category": "preposition"
+    },
+    "با": {
+      "transliteration": "bá",
+      "category": "preposition"
+    },
+    "بر": {
+      "transliteration": "bar",
+      "category": "preposition"
+    },
+    "که": {
+      "transliteration": "kih",
+      "category": "conjunction"
+    },
+    "را": {
+      "transliteration": "rá",
+      "category": "particle",
+      "notes": "Direct object marker"
+    },
+    "و": {
+      "transliteration": "va",
+      "category": "conjunction"
+    },
+    "یا": {
+      "transliteration": "yá",
+      "category": "particle",
+      "notes": "Or, vocative"
+    },
+    "ای": {
+      "transliteration": "ay",
+      "category": "particle",
+      "notes": "O (vocative)"
+    },
+    "تو": {
+      "transliteration": "tú",
+      "category": "pronoun"
+    },
+    "من": {
+      "transliteration": "man",
+      "category": "pronoun"
+    },
+    "او": {
+      "transliteration": "ú",
+      "category": "pronoun"
+    },
+    "این": {
+      "transliteration": "ín",
+      "category": "demonstrative"
+    },
+    "آن": {
+      "transliteration": "án",
+      "category": "demonstrative"
+    },
+    "آنچه": {
+      "transliteration": "ánchih",
+      "category": "relative_pronoun"
+    },
+    "می": {
+      "transliteration": "mí",
+      "category": "verbal_prefix",
+      "notes": "Present tense marker"
+    },
+    "خواهد": {
+      "transliteration": "kháhad",
+      "category": "auxiliary_verb",
+      "notes": "Future tense"
+    },
+    "است": {
+      "transliteration": "ast",
+      "category": "copula"
+    },
+    "بود": {
+      "transliteration": "búd",
+      "category": "copula"
+    },
+    "طلبم": {
+      "transliteration": "ṭalabam",
+      "category": "verb",
+      "notes": "I seek"
+    },
+    "می‌طلبم": {
+      "transliteration": "mí-ṭalabam",
+      "category": "verb",
+      "notes": "I am seeking"
+    },
+    "نموده": {
+      "transliteration": "namúdih",
+      "category": "verb",
+      "notes": "Has done"
+    },
+    "کرده": {
+      "transliteration": "kardih",
+      "category": "verb",
+      "notes": "Has done"
+    },
+    "فرموده": {
+      "transliteration": "farmúdih",
+      "category": "verb",
+      "notes": "Has commanded"
+    },
+    "فرمائی": {
+      "transliteration": "farmá'í",
+      "category": "verb",
+      "notes": "You command"
+    },
+    "بگو": {
+      "transliteration": "Bigú",
+      "category": "verb",
+      "notes": "Say! (imperative)"
+    },
+    "گواهی": {
+      "transliteration": "guvāhī",
+      "category": "noun"
+    },
+    "شهادت": {
+      "transliteration": "shahādaat",
+      "category": "noun"
+    },
+    "می‌دهم": {
+      "transliteration": "mí-diham",
+      "category": "verb",
+      "notes": "I give"
+    },
+    "یکتا": {
+      "transliteration": "yaktá",
+      "category": "adjective",
+      "notes": "Unique, one"
+    },
+    "وحدانیت": {
+      "transliteration": "vaḥdāniyyat",
+      "category": "noun",
+      "notes": "Unity"
+    },
+    "فردانیت": {
+      "transliteration": "fardāniyyat",
+      "category": "noun",
+      "notes": "Uniqueness"
+    },
+    "مالک": {
+      "transliteration": "mālik",
+      "category": "noun",
+      "notes": "Owner"
+    },
+    "ملکوت": {
+      "transliteration": "malakūt",
+      "category": "noun",
+      "notes": "Kingdom"
+    },
+    "سلطان": {
+      "transliteration": "sulṭān",
+      "category": "noun",
+      "notes": "Sovereign"
+    },
+    "غیب": {
+      "transliteration": "ghayb",
+      "category": "noun",
+      "notes": "Unseen"
+    },
+    "شهود": {
+      "transliteration": "shuhūd",
+      "category": "noun",
+      "notes": "Witnessed"
+    },
+    "مسکین": {
+      "transliteration": "miskīn",
+      "category": "adjective",
+      "notes": "Poor, humble"
+    },
+    "بحر": {
+      "transliteration": "baḥr",
+      "category": "noun",
+      "notes": "Ocean"
+    },
+    "غنا": {
+      "transliteration": "ghaná",
+      "category": "noun",
+      "notes": "Wealth"
+    },
+    "کریم": {
+      "transliteration": "karīm",
+      "category": "adjective",
+      "notes": "Generous"
+    },
+    "رحیم": {
+      "transliteration": "raḥīm",
+      "category": "adjective",
+      "notes": "Merciful"
+    },
+    "بخشنده": {
+      "transliteration": "bakhshindih",
+      "category": "adjective",
+      "notes": "Forgiving"
+    },
+    "توانا": {
+      "transliteration": "tavāná",
+      "category": "adjective",
+      "notes": "Powerful"
+    },
+    "دانا": {
+      "transliteration": "dāná",
+      "category": "adjective",
+      "notes": "Knowing"
+    },
+    "بینا": {
+      "transliteration": "bīná",
+      "category": "adjective",
+      "notes": "Seeing"
+    },
+    "جان": {
+      "transliteration": "ján",
+      "category": "noun",
+      "notes": "Soul"
+    },
+    "روان": {
+      "transliteration": "ruvān",
+      "category": "noun",
+      "notes": "Spirit"
+    },
+    "لسان": {
+      "transliteration": "lisān",
+      "category": "noun",
+      "notes": "Tongue"
+    },
+    "واحد": {
+      "transliteration": "vāḥid",
+      "category": "adjective",
+      "notes": "One"
+    },
+    "فقیر": {
+      "transliteration": "faqīr",
+      "category": "adjective",
+      "notes": "Poor"
+    },
+    "سائل": {
+      "transliteration": "sā'il",
+      "category": "noun",
+      "notes": "Supplicant"
+    },
+    "کنیز": {
+      "transliteration": "kanīz",
+      "category": "noun",
+      "notes": "Handmaiden"
+    },
+    "محبوب": {
+      "transliteration": "maḥbūb",
+      "category": "adjective",
+      "notes": "Beloved"
+    },
+    "سید": {
+      "transliteration": "sayyid",
+      "category": "noun",
+      "notes": "Master"
+    },
+    "سند": {
+      "transliteration": "sanad",
+      "category": "noun",
+      "notes": "Support"
+    },
+    "ایران": {
+      "transliteration": "Īrān",
+      "category": "proper_name"
+    },
+    "تأیید": {
+      "transliteration": "ta'yīd",
+      "category": "noun",
+      "notes": "Confirmation"
+    },
+    "توفیق": {
+      "transliteration": "tawfīq",
+      "category": "noun",
+      "notes": "Success"
+    },
+    "عطا": {
+      "transliteration": "'aṭā",
+      "category": "noun",
+      "notes": "Gift"
+    },
+    "سزاوار": {
+      "transliteration": "sizāvār",
+      "category": "adjective",
+      "notes": "Worthy"
+    },
+    "ایام": {
+      "transliteration": "ayyām",
+      "category": "noun",
+      "notes": "Days"
+    },
+    "عمل": {
+      "transliteration": "'amal",
+      "category": "noun",
+      "notes": "Action"
+    },
+    "قابل": {
+      "transliteration": "qābil",
+      "category": "adjective",
+      "notes": "Capable"
+    },
+    "جود": {
+      "transliteration": "jūd",
+      "category": "noun",
+      "notes": "Generosity"
+    },
+    "کرم": {
+      "transliteration": "karam",
+      "category": "noun",
+      "notes": "Kindness"
+    },
+    "مشغول": {
+      "transliteration": "mashghūl",
+      "category": "adjective",
+      "notes": "Occupied"
+    },
+    "غافلان": {
+      "transliteration": "ghāfilān",
+      "category": "noun",
+      "notes": "The heedless"
+    },
+    "آگاهی": {
+      "transliteration": "āgāhī",
+      "category": "noun",
+      "notes": "Awareness"
+    },
+    "راه": {
+      "transliteration": "rāh",
+      "category": "noun",
+      "notes": "Path"
+    },
+    "نما": {
+      "transliteration": "namā",
+      "category": "verb",
+      "notes": "Show"
+    },
+    "کنیزان": {
+      "transliteration": "kanīzān",
+      "category": "noun",
+      "notes": "Handmaidens"
+    },
+    "انوار": {
+      "transliteration": "anwār",
+      "category": "noun",
+      "notes": "Lights"
+    },
+    "اسم": {
+      "transliteration": "ism",
+      "category": "noun",
+      "notes": "Name"
+    },
+    "منور": {
+      "transliteration": "munawwar",
+      "category": "adjective",
+      "notes": "Illuminated"
+    },
+    "اعمال": {
+      "transliteration": "a'māl",
+      "category": "noun",
+      "notes": "Deeds"
+    },
+    "طیبه": {
+      "transliteration": "ṭayyibih",
+      "category": "adjective",
+      "notes": "Good"
+    },
+    "طاهره": {
+      "transliteration": "ṭāhirih",
+      "category": "adjective",
+      "notes": "Pure"
+    },
+    "اخلاق": {
+      "transliteration": "akhlāq",
+      "category": "noun",
+      "notes": "Morals"
+    },
+    "مرضیه": {
+      "transliteration": "marḍiyyih",
+      "category": "adjective",
+      "notes": "Pleasing"
+    },
+    "مؤید": {
+      "transliteration": "mu'ayyad",
+      "category": "adjective",
+      "notes": "Confirmed"
+    },
+    "حمد": {
+      "transliteration": "ḥamd",
+      "category": "noun",
+      "notes": "Praise"
+    },
+    "ثنا": {
+      "transliteration": "thanā",
+      "category": "noun",
+      "notes": "Praise"
+    },
+    "فضل": {
+      "transliteration": "faḍl",
+      "category": "noun",
+      "notes": "Grace"
+    },
+    "نمله": {
+      "transliteration": "namlih",
+      "category": "noun",
+      "notes": "Ant"
+    },
+    "فانیه": {
+      "transliteration": "fāniyih",
+      "category": "adjective",
+      "notes": "Transient"
+    },
+    "سرادق": {
+      "transliteration": "surādiq",
+      "category": "noun",
+      "notes": "Pavilion"
+    },
+    "عرفان": {
+      "transliteration": "'irfān",
+      "category": "noun",
+      "notes": "Gnosis"
+    },
+    "ظل": {
+      "transliteration": "ẓill",
+      "category": "noun",
+      "notes": "Shadow"
+    },
+    "خباء": {
+      "transliteration": "khibā'",
+      "category": "noun",
+      "notes": "Tent"
+    },
+    "مجد": {
+      "transliteration": "majd",
+      "category": "noun",
+      "notes": "Glory"
+    },
+    "مأوی": {
+      "transliteration": "ma'vā",
+      "category": "noun",
+      "notes": "Shelter"
+    },
+    "توئی": {
+      "transliteration": "tū'ī",
+      "category": "pronoun",
+      "notes": "You are"
+    }
+  },
+  "ezafe_rules": {
+    "connector": "‌",
+    "transliteration": "-i",
+    "before_consonant": "-i",
+    "before_vowel": "-yi",
+    "after_silent_h": "-'i",
+    "examples": {
+      "بحر عطا": "baḥr-i 'aṭā",
+      "کنیز خود": "kanīz-i khud",
+      "اسم کریم": "ism-i karīm",
+      "پروردگار من": "Parvardigār-i man"
+    }
+  },
+  "verbal_prefixes": {
+    "می": {
+      "transliteration": "mí-",
+      "function": "present_continuous",
+      "notes": "Always hyphenated"
+    },
+    "خواهد": {
+      "transliteration": "kháhad",
+      "function": "future",
+      "notes": "Future auxiliary"
+    },
+    "بر": {
+      "transliteration": "bar",
+      "function": "intensifier",
+      "notes": "Verbal prefix"
+    }
+  },
+  "suffixes": {
+    "possessive": {
+      "ت": {
+        "transliteration": "at",
+        "meaning": "your (singular)"
+      },
+      "تان": {
+        "transliteration": "atān",
+        "meaning": "your (plural)"
+      },
+      "ش": {
+        "transliteration": "ash",
+        "meaning": "his/her"
+      },
+      "شان": {
+        "transliteration": "ashān",
+        "meaning": "their"
+      },
+      "م": {
+        "transliteration": "am",
+        "meaning": "my"
+      },
+      "مان": {
+        "transliteration": "amān",
+        "meaning": "our"
+      }
+    },
+    "plural": {
+      "ان": {
+        "transliteration": "ān",
+        "notes": "Human plural"
+      },
+      "ات": {
+        "transliteration": "āt",
+        "notes": "Arabic plural"
+      },
+      "ها": {
+        "transliteration": "hā",
+        "notes": "General plural"
+      }
+    }
+  },
+  "vowel_patterns": {
+    "long_vowels": {
+      "آ": "ā",
+      "ای": "ī",
+      "او": "ū",
+      "ی": "ī",
+      "و": "ū"
+    },
+    "short_vowels": {
+      "َ": "a",
+      "ِ": "i",
+      "ُ": "u"
+    },
+    "vowel_harmony": {
+      "front_vowels": ["i", "e", "ī"],
+      "back_vowels": ["a", "o", "u", "ā", "ū"],
+      "neutral_vowels": ["ə"]
+    }
+  },
+  "stress_patterns": {
+    "default": "final",
+    "exceptions": {
+      "compound_words": "first_element",
+      "verbal_forms": "stem",
+      "enclitic_pronouns": "before_enclitic"
+    }
+  },
+  "consonant_changes": {
+    "persian_specific": {
+      "پ": "p",
+      "چ": "ch",
+      "ژ": "zh",
+      "گ": "g"
+    },
+    "arabic_borrowings": {
+      "ث": "s",
+      "ح": "h",
+      "ذ": "z",
+      "ص": "s",
+      "ض": "z",
+      "ط": "t",
+      "ظ": "z",
+      "ع": "'",
+      "غ": "gh",
+      "ق": "q"
+    }
+  },
+  "morphological_patterns": {
+    "compound_verbs": {
+      "pattern": "noun + light_verb",
+      "examples": {
+        "کار کردن": "kār kardan (to work)",
+        "گوش دادن": "gūsh dādan (to listen)"
+      }
+    },
+    "derived_forms": {
+      "causative": {
+        "suffix": "اندن",
+        "transliteration": "āndan"
+      },
+      "passive": {
+        "suffix": "یدن",
+        "transliteration": "īdan"
+      }
+    }
+  },
+  "heuristics": {
+    "default_vowels": {
+      "word_initial": "a",
+      "word_medial": "a",
+      "word_final": ""
+    },
+    "consonant_clusters": {
+      "insert_vowel": "a",
+      "common_clusters": ["st", "sp", "sk", "sh", "kh", "gh", "zh"]
+    },
+    "borrowed_words": {
+      "arabic": "preserve_original_vowels",
+      "french": "adapt_to_persian_phonology",
+      "english": "simplify_consonant_clusters"
+    }
+  }
+}

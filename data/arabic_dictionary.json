@@ -1,0 +1,407 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Arabic to Bahá'í transliteration dictionary with vowel patterns and heuristics",
+    "last_updated": "2024-12-19"
+  },
+  "common_words": {
+    "الله": {
+      "transliteration": "Alláh",
+      "category": "divine_name",
+      "notes": "Always capitalized"
+    },
+    "إله": {
+      "transliteration": "iláh",
+      "category": "divine_term"
+    },
+    "إلهي": {
+      "transliteration": "Iláhí",
+      "category": "divine_term",
+      "notes": "Capitalized when addressing God"
+    },
+    "يا": {
+      "transliteration": "yá",
+      "category": "particle",
+      "notes": "Vocative particle"
+    },
+    "أشهد": {
+      "transliteration": "ashhadu",
+      "category": "verb",
+      "root": "ش-ه-د"
+    },
+    "بأنك": {
+      "transliteration": "bi-annaka",
+      "category": "particle_pronoun"
+    },
+    "وأنت": {
+      "transliteration": "wa-anta",
+      "category": "conjunction_pronoun"
+    },
+    "إنك": {
+      "transliteration": "innaka",
+      "category": "particle_pronoun"
+    },
+    "أنت": {
+      "transliteration": "anta",
+      "category": "pronoun"
+    },
+    "هو": {
+      "transliteration": "huwa",
+      "category": "pronoun"
+    },
+    "خلقتني": {
+      "transliteration": "khalaqtaní",
+      "category": "verb",
+      "root": "خ-ل-ق"
+    },
+    "لعرفانك": {
+      "transliteration": "li-'irfánika",
+      "category": "noun_suffix"
+    },
+    "وعبادتك": {
+      "transliteration": "wa-'ibádatika",
+      "category": "noun_suffix"
+    },
+    "هذا": {
+      "transliteration": "hádhá",
+      "category": "demonstrative"
+    },
+    "الحين": {
+      "transliteration": "al-ḥíni",
+      "category": "noun"
+    },
+    "بعجزي": {
+      "transliteration": "bi-'ajzí",
+      "category": "noun_suffix"
+    },
+    "وقوتك": {
+      "transliteration": "wa-quwwatika",
+      "category": "noun_suffix"
+    },
+    "وضعفي": {
+      "transliteration": "wa-ḍa'fí",
+      "category": "noun_suffix"
+    },
+    "واقتدارك": {
+      "transliteration": "wa-iqtidárika",
+      "category": "noun_suffix"
+    },
+    "وفقري": {
+      "transliteration": "wa-faqrí",
+      "category": "noun_suffix"
+    },
+    "وغنائك": {
+      "transliteration": "wa-ghaná'ika",
+      "category": "noun_suffix"
+    },
+    "لا": {
+      "transliteration": "lá",
+      "category": "particle"
+    },
+    "إلا": {
+      "transliteration": "illá",
+      "category": "particle"
+    },
+    "من": {
+      "transliteration": "min",
+      "category": "preposition"
+    },
+    "إلى": {
+      "transliteration": "ilá",
+      "category": "preposition"
+    },
+    "على": {
+      "transliteration": "'alá",
+      "category": "preposition"
+    },
+    "في": {
+      "transliteration": "fí",
+      "category": "preposition"
+    },
+    "عن": {
+      "transliteration": "'an",
+      "category": "preposition"
+    },
+    "مع": {
+      "transliteration": "ma'a",
+      "category": "preposition"
+    },
+    "كل": {
+      "transliteration": "kull",
+      "category": "quantifier"
+    },
+    "جميع": {
+      "transliteration": "jamí'",
+      "category": "quantifier"
+    },
+    "اسم": {
+      "transliteration": "ism",
+      "category": "noun"
+    },
+    "اسمك": {
+      "transliteration": "ismuka",
+      "category": "noun_suffix"
+    },
+    "شفاء": {
+      "transliteration": "shifá'",
+      "category": "noun"
+    },
+    "شفائي": {
+      "transliteration": "shifá'í",
+      "category": "noun_suffix"
+    },
+    "ذكرك": {
+      "transliteration": "dhikruka",
+      "category": "noun_suffix"
+    },
+    "دواء": {
+      "transliteration": "dawá'",
+      "category": "noun"
+    },
+    "دوائي": {
+      "transliteration": "dawá'í",
+      "category": "noun_suffix"
+    },
+    "قربك": {
+      "transliteration": "qurbuka",
+      "category": "noun_suffix"
+    },
+    "رجاء": {
+      "transliteration": "rajá'",
+      "category": "noun"
+    },
+    "رجائي": {
+      "transliteration": "rajá'í",
+      "category": "noun_suffix"
+    },
+    "حب": {
+      "transliteration": "ḥubb",
+      "category": "noun"
+    },
+    "حبك": {
+      "transliteration": "ḥubbuka",
+      "category": "noun_suffix"
+    },
+    "وحبك": {
+      "transliteration": "wa-ḥubbuka",
+      "category": "noun_suffix"
+    },
+    "مؤنسي": {
+      "transliteration": "mu'nisí",
+      "category": "noun_suffix"
+    },
+    "رحمة": {
+      "transliteration": "raḥmah",
+      "category": "noun"
+    },
+    "رحمتك": {
+      "transliteration": "raḥmatuka",
+      "category": "noun_suffix"
+    },
+    "طبيب": {
+      "transliteration": "ṭabíb",
+      "category": "noun"
+    },
+    "طبيبي": {
+      "transliteration": "ṭabíbí",
+      "category": "noun_suffix"
+    },
+    "معين": {
+      "transliteration": "mu'ín",
+      "category": "noun"
+    },
+    "معيني": {
+      "transliteration": "mu'íní",
+      "category": "noun_suffix"
+    },
+    "الدنيا": {
+      "transliteration": "ad-dunyá",
+      "category": "noun"
+    },
+    "الآخرة": {
+      "transliteration": "al-ákhirati",
+      "category": "noun"
+    },
+    "وإنك": {
+      "transliteration": "wa-innaka",
+      "category": "conjunction_particle"
+    },
+    "بسمه": {
+      "transliteration": "bismihi",
+      "category": "formula"
+    },
+    "تعالى": {
+      "transliteration": "ta'álá",
+      "category": "divine_attribute"
+    },
+    "شأنه": {
+      "transliteration": "sha'nuhu",
+      "category": "noun_suffix"
+    },
+    "أحمد": {
+      "transliteration": "Aḥmad",
+      "category": "proper_name"
+    },
+    "لوح": {
+      "transliteration": "Lawḥ",
+      "category": "noun"
+    }
+  },
+  "divine_names": {
+    "المهيمن": {
+      "transliteration": "al-Muhaymín",
+      "meaning": "The Protector"
+    },
+    "القيوم": {
+      "transliteration": "al-Qayyúm",
+      "meaning": "The Self-Subsisting"
+    },
+    "العليم": {
+      "transliteration": "al-'Alím",
+      "meaning": "The All-Knowing"
+    },
+    "الحكيم": {
+      "transliteration": "al-Ḥakím",
+      "meaning": "The Wise"
+    },
+    "الغفور": {
+      "transliteration": "al-Ghafúr",
+      "meaning": "The Forgiving"
+    },
+    "الكريم": {
+      "transliteration": "al-Karím",
+      "meaning": "The Generous"
+    },
+    "الرحمن": {
+      "transliteration": "ar-Raḥmán",
+      "meaning": "The Compassionate"
+    },
+    "الرحيم": {
+      "transliteration": "ar-Raḥím",
+      "meaning": "The Merciful"
+    },
+    "المقتدر": {
+      "transliteration": "al-Muqtadir",
+      "meaning": "The Omnipotent"
+    },
+    "القدير": {
+      "transliteration": "al-Qadír",
+      "meaning": "The Powerful"
+    },
+    "العزيز": {
+      "transliteration": "al-'Azíz",
+      "meaning": "The Mighty"
+    },
+    "السلطان": {
+      "transliteration": "as-Sulṭán",
+      "meaning": "The Sovereign"
+    },
+    "المعطي": {
+      "transliteration": "al-Mu'ṭí",
+      "meaning": "The Giver"
+    },
+    "العالمين": {
+      "transliteration": "al-'Álamín",
+      "meaning": "The Worlds"
+    },
+    "العارفين": {
+      "transliteration": "al-'Árifín",
+      "meaning": "The Knowers"
+    }
+  },
+  "common_phrases": {
+    "يا إلهي": {
+      "transliteration": "yá Iláhí,",
+      "notes": "Always followed by comma"
+    },
+    "لا إله إلا": {
+      "transliteration": "lá iláha illá",
+      "notes": "Beginning of shahada"
+    },
+    "في هذا الحين": {
+      "transliteration": "fí hádhá'l-ḥíni",
+      "notes": "Complete phrase"
+    },
+    "أنت المهيمن القيوم": {
+      "transliteration": "anta'l-Muhayminu'l-Qayyúm",
+      "notes": "Divine name combination"
+    }
+  },
+  "vowel_patterns": {
+    "fatha_alif": {
+      "pattern": "َا",
+      "transliteration": "á"
+    },
+    "kasra_ya": {
+      "pattern": "ِي",
+      "transliteration": "í"
+    },
+    "damma_waw": {
+      "pattern": "ُو",
+      "transliteration": "ú"
+    },
+    "possessive_suffix": {
+      "pattern": "ك$",
+      "transliteration": "uka",
+      "notes": "Your (masculine)"
+    },
+    "my_suffix": {
+      "pattern": "ي$",
+      "transliteration": "í",
+      "notes": "My/mine"
+    }
+  },
+  "article_rules": {
+    "definite_article": {
+      "pattern": "ال",
+      "moon_letters": "ابجحخعغفقكلمنهوي",
+      "sun_letters": "تثدذرزسشصضطظنل",
+      "moon_transliteration": "al-",
+      "sun_transliteration": "a{letter}-"
+    },
+    "preposition_article": {
+      "wa_al": "wa'l-",
+      "bi_al": "bi'l-",
+      "fi_al": "fí'l-",
+      "li_al": "li'l-",
+      "ka_al": "ka'l-",
+      "min_al": "mina'l-",
+      "ila_al": "ilá'l-",
+      "ala_al": "'alá'l-",
+      "an_al": "'ani'l-"
+    }
+  },
+  "morphological_patterns": {
+    "fa3ala": {
+      "pattern": "فعل",
+      "description": "Basic verb pattern",
+      "vowel_pattern": "a-a-a"
+    },
+    "fa3eel": {
+      "pattern": "فعيل",
+      "description": "Adjective pattern",
+      "vowel_pattern": "a-í-"
+    },
+    "maf3ool": {
+      "pattern": "مفعول",
+      "description": "Passive participle",
+      "vowel_pattern": "ma-ú-"
+    }
+  },
+  "heuristics": {
+    "default_vowels": {
+      "initial_vowel": "a",
+      "medial_vowel": "a",
+      "final_vowel": ""
+    },
+    "consonant_clusters": {
+      "break_with": "a",
+      "exceptions": ["st", "tr", "bl", "br", "fl", "fr", "gl", "gr", "pl", "pr", "sl", "sm", "sn", "sp", "sw"]
+    },
+    "stress_patterns": {
+      "penultimate": "Most words stressed on penultimate syllable",
+      "ultimate": "Words ending in long vowel stressed on ultimate",
+      "antepenultimate": "Rare, usually in borrowed words"
+    }
+  }
+}

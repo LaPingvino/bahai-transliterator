@@ -1,6 +1,10 @@
 package transliterator
 
 import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"unicode"
@@ -14,302 +18,236 @@ const (
 	Persian
 )
 
-// Transliterator handles Arabic and Persian to Bahai transliteration
-type Transliterator struct {
-	// Arabic letter mappings
-	arabicLetters map[rune]string
-	// Persian letter mappings
-	persianLetters map[rune]string
-	// Vowel diacritics
-	vowelMarks map[rune]string
-	// Common word patterns
-	arabicWords map[string]string
-	persianWords map[string]string
-	// Regex patterns for post-processing
-	patterns []patternRule
+// Dictionary represents a language dictionary structure
+type Dictionary struct {
+	Metadata struct {
+		Version     string `json:"version"`
+		Description string `json:"description"`
+		LastUpdated string `json:"last_updated"`
+	} `json:"metadata"`
+	CommonWords     map[string]WordEntry `json:"common_words"`
+	DivineNames     map[string]WordEntry `json:"divine_names,omitempty"`
+	CommonPhrases   map[string]WordEntry `json:"common_phrases,omitempty"`
+	VowelPatterns   map[string]Pattern   `json:"vowel_patterns"`
+	ArticleRules    map[string]Rule      `json:"article_rules,omitempty"`
+	EzafeRules      map[string]Rule      `json:"ezafe_rules,omitempty"`
+	Heuristics      map[string]Rule      `json:"heuristics"`
 }
 
-type patternRule struct {
+// WordEntry represents a word with its transliteration and metadata
+type WordEntry struct {
+	Transliteration string `json:"transliteration"`
+	Category        string `json:"category,omitempty"`
+	Notes           string `json:"notes,omitempty"`
+	Root            string `json:"root,omitempty"`
+	Meaning         string `json:"meaning,omitempty"`
+}
+
+// Pattern represents a transliteration pattern
+type Pattern struct {
+	Pattern         string `json:"pattern"`
+	Transliteration string `json:"transliteration"`
+	Notes           string `json:"notes,omitempty"`
+}
+
+// Rule represents a transliteration rule
+type Rule struct {
+	Pattern         string            `json:"pattern,omitempty"`
+	Transliteration string            `json:"transliteration,omitempty"`
+	Notes           string            `json:"notes,omitempty"`
+	Examples        map[string]string `json:"examples,omitempty"`
+}
+
+// Transliterator handles Arabic and Persian to Bahai transliteration
+type Transliterator struct {
+	arabicDict      *Dictionary
+	persianDict     *Dictionary
+	arabicLetters   map[rune]string
+	persianLetters  map[rune]string
+	vowelMarks      map[rune]string
+	postProcessors  []postProcessor
+}
+
+type postProcessor struct {
 	regex       *regexp.Regexp
 	replacement string
 	description string
 }
 
-// New creates a new Transliterator with predefined rules
+// New creates a new Transliterator with loaded dictionaries
 func New() *Transliterator {
 	t := &Transliterator{
 		arabicLetters:  make(map[rune]string),
 		persianLetters: make(map[rune]string),
 		vowelMarks:     make(map[rune]string),
-		arabicWords:    make(map[string]string),
-		persianWords:   make(map[string]string),
 	}
-	t.initializeMappings()
+	
+	// Load dictionaries
+	if err := t.loadDictionaries(); err != nil {
+		// Fallback to embedded mappings if dictionary files are not available
+		t.initializeFallbackMappings()
+	}
+	
+	t.initializeLetterMappings()
+	t.initializePostProcessors()
+	
 	return t
 }
 
-func (t *Transliterator) initializeMappings() {
+// loadDictionaries loads the external dictionary files
+func (t *Transliterator) loadDictionaries() error {
+	// Load Arabic dictionary
+	arabicData, err := ioutil.ReadFile(filepath.Join("data", "arabic_dictionary.json"))
+	if err != nil {
+		return fmt.Errorf("failed to load Arabic dictionary: %w", err)
+	}
+	
+	t.arabicDict = &Dictionary{}
+	if err := json.Unmarshal(arabicData, t.arabicDict); err != nil {
+		return fmt.Errorf("failed to parse Arabic dictionary: %w", err)
+	}
+	
+	// Load Persian dictionary
+	persianData, err := ioutil.ReadFile(filepath.Join("data", "persian_dictionary.json"))
+	if err != nil {
+		return fmt.Errorf("failed to load Persian dictionary: %w", err)
+	}
+	
+	t.persianDict = &Dictionary{}
+	if err := json.Unmarshal(persianData, t.persianDict); err != nil {
+		return fmt.Errorf("failed to parse Persian dictionary: %w", err)
+	}
+	
+	return nil
+}
+
+// initializeFallbackMappings provides basic mappings if dictionaries can't be loaded
+func (t *Transliterator) initializeFallbackMappings() {
+	// Create minimal dictionaries for fallback
+	t.arabicDict = &Dictionary{
+		CommonWords: map[string]WordEntry{
+			"الله": {Transliteration: "Alláh", Category: "divine_name"},
+			"يا":  {Transliteration: "yá", Category: "particle"},
+			"إلهي": {Transliteration: "Iláhí", Category: "divine_term"},
+		},
+		VowelPatterns: map[string]Pattern{
+			"fatha_alif": {Pattern: "َا", Transliteration: "á"},
+			"kasra_ya":   {Pattern: "ِي", Transliteration: "í"},
+			"damma_waw":  {Pattern: "ُو", Transliteration: "ú"},
+		},
+		Heuristics: map[string]Rule{
+			"default_vowels": {Notes: "Use 'a' for missing vowels"},
+		},
+	}
+	
+	t.persianDict = &Dictionary{
+		CommonWords: map[string]WordEntry{
+			"خدا": {Transliteration: "Khudá", Category: "divine_name"},
+			"از":  {Transliteration: "az", Category: "preposition"},
+			"به":  {Transliteration: "bih", Category: "preposition"},
+		},
+		VowelPatterns: map[string]Pattern{},
+		Heuristics: map[string]Rule{
+			"default_vowels": {Notes: "Use 'a' for missing vowels"},
+		},
+	}
+}
+
+// initializeLetterMappings sets up basic letter-to-letter mappings
+func (t *Transliterator) initializeLetterMappings() {
 	// Arabic letter mappings
 	t.arabicLetters = map[rune]string{
-		'ا': "á",  // alif
-		'أ': "a",  // hamza above alif
-		'إ': "i",  // hamza below alif
-		'آ': "á",  // madda alif
-		'ب': "b",  // ba
-		'ت': "t",  // ta
-		'ث': "th", // tha
-		'ج': "j",  // jim
-		'ح': "ḥ",  // ha (emphatic)
-		'خ': "kh", // kha
-		'د': "d",  // dal
-		'ذ': "dh", // dhal
-		'ر': "r",  // ra
-		'ز': "z",  // zayn
-		'س': "s",  // sin
-		'ش': "sh", // shin
-		'ص': "ṣ",  // sad (emphatic)
-		'ض': "ḍ",  // dad (emphatic)
-		'ط': "ṭ",  // ta (emphatic)
-		'ظ': "ẓ",  // za (emphatic)
-		'ع': "'",  // ayn
-		'غ': "gh", // ghayn
-		'ف': "f",  // fa
-		'ق': "q",  // qaf
-		'ك': "k",  // kaf
-		'ک': "k",  // kaf (Persian form)
-		'ل': "l",  // lam
-		'م': "m",  // mim
-		'ن': "n",  // nun
-		'ه': "h",  // ha
-		'و': "w",  // waw
-		'ي': "y",  // ya
-		'ى': "á",  // alif maqsura
-		'ئ': "'",  // hamza on ya
-		'ؤ': "'",  // hamza on waw
-		'ة': "h",  // ta marbuta
+		'ا': "á",  'أ': "a",  'إ': "i",  'آ': "á",
+		'ب': "b",  'ت': "t",  'ث': "th", 'ج': "j",
+		'ح': "ḥ",  'خ': "kh", 'د': "d",  'ذ': "dh",
+		'ر': "r",  'ز': "z",  'س': "s",  'ش': "sh",
+		'ص': "ṣ",  'ض': "ḍ",  'ط': "ṭ",  'ظ': "ẓ",
+		'ع': "'",  'غ': "gh", 'ف': "f",  'ق': "q",
+		'ك': "k",  'ک': "k",  'ل': "l",  'م': "m",
+		'ن': "n",  'ه': "h",  'و': "w",  'ي': "y",
+		'ى': "á",  'ئ': "'",  'ؤ': "'",  'ة': "h",
 	}
 
-	// Persian letter mappings (inherits Arabic + specific changes)
+	// Persian letter mappings (inherit from Arabic + modifications)
 	t.persianLetters = make(map[rune]string)
 	for k, v := range t.arabicLetters {
 		t.persianLetters[k] = v
 	}
 	
 	// Persian-specific letters
-	t.persianLetters['پ'] = "p"  // pe
-	t.persianLetters['چ'] = "ch" // che
-	t.persianLetters['ژ'] = "zh" // zhe
-	t.persianLetters['گ'] = "g"  // gaf
+	t.persianLetters['پ'] = "p"
+	t.persianLetters['چ'] = "ch"
+	t.persianLetters['ژ'] = "zh"
+	t.persianLetters['گ'] = "g"
 	
 	// Persian pronunciation differences
-	t.persianLetters['ث'] = "s"  // se (not th)
-	t.persianLetters['ح'] = "h"  // he (not emphatic)
-	t.persianLetters['ذ'] = "z"  // zal (not dh)
-	t.persianLetters['ص'] = "s"  // sad (not emphatic)
-	t.persianLetters['ض'] = "z"  // zad (not emphatic)
-	t.persianLetters['ط'] = "t"  // ta (not emphatic)
-	t.persianLetters['ظ'] = "z"  // za (not emphatic)
-	t.persianLetters['و'] = "v"  // vav (not w)
-	t.persianLetters['ی'] = "í"  // ye
-	t.persianLetters['ي'] = "í"  // ye
+	t.persianLetters['ث'] = "s"
+	t.persianLetters['ح'] = "h"
+	t.persianLetters['ذ'] = "z"
+	t.persianLetters['ص'] = "s"
+	t.persianLetters['ض'] = "z"
+	t.persianLetters['ط'] = "t"
+	t.persianLetters['ظ'] = "z"
+	t.persianLetters['و'] = "v"
+	t.persianLetters['ی'] = "í"
+	t.persianLetters['ي'] = "í"
 
 	// Vowel marks
 	t.vowelMarks = map[rune]string{
-		'َ': "a",  // fatha
-		'ِ': "i",  // kasra
-		'ُ': "u",  // damma
-		'ْ': "",   // sukun
-		'ً': "an", // tanwin fath
-		'ٍ': "in", // tanwin kasr
-		'ٌ': "un", // tanwin damm
-		'ّ': "",   // shadda (handled specially)
-		'ٰ': "á",  // alif khanjariya
+		'َ': "a",  'ِ': "i",  'ُ': "u",  'ْ': "",
+		'ً': "an", 'ٍ': "in", 'ٌ': "un", 'ّ': "",
+		'ٰ': "á",
 	}
+}
 
-	// Arabic common words
-	t.arabicWords = map[string]string{
-		"الله":       "Alláh",
-		"إله":       "iláh",
-		"إلهي":      "Iláhí",
-		"يا":        "yá",
-		"أشهد":      "ashhadu",
-		"بأنك":      "bi-annaka",
-		"بأنه":      "bi-annahu",
-		"وأنت":      "wa-anta",
-		"إنك":       "innaka",
-		"إنه":       "innahu",
-		"أنت":       "anta",
-		"هو":        "huwa",
-		"المهيمن":    "al-Muhaymín",
-		"القيوم":     "al-Qayyúm",
-		"العليم":     "al-'Alím",
-		"الحكيم":     "al-Ḥakím",
-		"الغفور":     "al-Ghafúr",
-		"الكريم":     "al-Karím",
-		"الرحمن":     "ar-Raḥmán",
-		"الرحيم":     "ar-Raḥím",
-		"المقتدر":    "al-Muqtadir",
-		"القدير":     "al-Qadír",
-		"العزيز":     "al-'Azíz",
-		"السلطان":    "as-Sulṭán",
-		"بسمه":       "bismihi",
-		"الأسماء":    "al-Asmá'",
-		"العظمة":     "al-'Aẓamah",
-		"الاقتدار":   "al-Iqtidár",
-		"الفردوس":   "al-Firdaws",
-		"البقاء":     "al-Baqá'",
-		"المخلصين":   "al-Mukhlliṣín",
-		"الموحدين":   "al-Muwaḥḥidín",
-		"العالمين":   "al-'Álamín",
-		"العارفين":   "al-'Árifín",
-		"المعطي":     "al-Mu'ṭí",
-		"لا":        "lá",
-		"إلا":       "illá",
-		"من":        "min",
-		"إلى":       "ilá",
-		"على":       "'alá",
-		"في":        "fí",
-		"عن":        "'an",
-		"مع":        "ma'a",
-		"كل":        "kull",
-		"جميع":      "jamí'",
-		"أحمد":      "Aḥmad",
-		"لوح":       "Lawḥ",
-		"شفاء":      "shifá'",
-		"دواء":      "dawá'",
-		"رجاء":      "rajá'",
-		"حب":        "ḥubb",
-		"رحمة":      "raḥmah",
-		"طبيب":      "ṭabíb",
-		"معين":      "mu'ín",
-		"الدنيا":    "ad-dunyá",
-		"الآخرة":    "al-ákhirati",
-		"اسم":       "ism",
-		"اسمك":      "ismuka",
-		"شفائي":     "shifá'í",
-		"ذكرك":      "dhikruka",
-		"دوائي":     "dawá'í",
-		"قربك":      "qurbuka",
-		"رجائي":     "rajá'í",
-		"حبك":       "ḥubbuka",
-		"وحبك":      "wa-ḥubbuka",
-		"مؤنسي":     "mu'nisí",
-		"رحمتك":     "raḥmatuka",
-		"طبيبي":     "ṭabíbí",
-		"معيني":     "mu'íní",
-		"وإنك":      "wa-innaka",
-		"يا إلهي":   "yá Iláhí,",
+// initializePostProcessors sets up regex-based post-processing rules
+func (t *Transliterator) initializePostProcessors() {
+	rules := []struct {
+		pattern     string
+		replacement string
+		description string
+	}{
+		// Article combinations
+		{`\bwa\s+al-`, "wa'l-", "wa + al"},
+		{`\bbi\s+al-`, "bi'l-", "bi + al"},
+		{`\bfí\s+al-`, "fí'l-", "fí + al"},
+		{`\bka\s+al-`, "ka'l-", "ka + al"},
+		{`\bli\s+al-`, "li'l-", "li + al"},
+		{`\bmin\s+al-`, "mina'l-", "min + al"},
+		{`\bilá\s+al-`, "ilá'l-", "ilá + al"},
+		{`\b'alá\s+al-`, "'alá'l-", "'alá + al"},
+		{`\b'an\s+al-`, "'ani'l-", "'an + al"},
+		
+		// Persian ezafe
+		{`\bmí\s+`, "mí-", "Persian present tense"},
+		{`‌`, "-", "Persian ezafe connector"},
+		
+		// Fix spacing
+		{`\s+`, " ", "normalize spaces"},
+		{`\s*-\s*`, "-", "normalize hyphens"},
+		
+		// Clean up punctuation
+		{`\s+([,.!?;:])`, "$1", "punctuation spacing"},
 	}
-
-	// Persian common words
-	t.persianWords = map[string]string{
-		"خدا":       "Khudá",
-		"خداوند":    "Khudávand",
-		"پروردگار":  "Parvardigár",
-		"از":        "az",
-		"به":        "bih",
-		"در":        "dar",
-		"تا":        "tá",
-		"با":        "bá",
-		"بر":        "bar",
-		"که":        "kih",
-		"را":        "rá",
-		"و":         "va",
-		"یا":        "yá",
-		"ای":        "ay",
-		"تو":        "tú",
-		"من":        "man",
-		"او":        "ú",
-		"این":       "ín",
-		"آن":        "án",
-		"می":        "mí",
-		"خواهد":     "kháhad",
-		"است":       "ast",
-		"بود":       "búd",
-		"نموده":     "namúdih",
-		"کرده":      "kardih",
-		"فرموده":    "farmúdih",
-		"بگو":       "Bigú",
-		"گواهی":     "guvāhī",
-		"شهادت":     "shahādaat",
-		"یکتا":      "yaktá",
-		"وحدانیت":   "vaḥdāniyyat",
-		"فردانیت":   "fardāniyyat",
-		"مالک":      "mālik",
-		"ملکوت":     "malakūt",
-		"سلطان":     "sulṭān",
-		"غیب":       "ghayb",
-		"شهود":      "shuhūd",
-		"مسکین":     "miskīn",
-		"بحر":       "baḥr",
-		"غنا":       "ghaná",
-		"کریم":      "karīm",
-		"رحیم":      "raḥīm",
-		"بخشنده":    "bakhshindih",
-		"توانا":     "tavāná",
-		"دانا":      "dāná",
-		"بینا":      "bīná",
-		"جان":       "ján",
-		"روان":      "ruvān",
-		"لسان":      "lisān",
-		"واحد":      "vāḥid",
-		"فقیر":      "faqīr",
-		"سائل":      "sā'il",
-		"کنیز":      "kanīz",
-		"محبوب":     "maḥbūb",
-		"سید":       "sayyid",
-		"سند":       "sanad",
-		"مقصود":     "maqṣūd",
-		"ایران":     "Īrān",
-	}
-
-	// Post-processing patterns
-	t.patterns = []patternRule{
-		// Fix article combinations
-		{regexp.MustCompile(`\bwa\s+al-`), "wa'l-", "wa + al"},
-		{regexp.MustCompile(`\bwa\s+a([tṭdḍrzsṣshnjl])-`), "wa'$1-", "wa + sun letters"},
-		{regexp.MustCompile(`\bbi\s+al-`), "bi'l-", "bi + al"},
-		{regexp.MustCompile(`\bfī\s+al-`), "fī'l-", "fī + al"},
-		{regexp.MustCompile(`\bfī\s+a([tṭdḍrzsṣshnjl])-`), "fī'$1-", "fī + sun letters"},
-		{regexp.MustCompile(`\bka\s+al-`), "ka'l-", "ka + al"},
-		{regexp.MustCompile(`\bli\s+al-`), "li'l-", "li + al"},
-		{regexp.MustCompile(`\bmin\s+al-`), "mina'l-", "min + al"},
-		{regexp.MustCompile(`\bilá\s+al-`), "ilá'l-", "ilá + al"},
-		{regexp.MustCompile(`\b'alá\s+al-`), "'alá'l-", "'alá + al"},
-		{regexp.MustCompile(`\b'an\s+al-`), "'ani'l-", "'an + al"},
-		
-		// Fix definite article with sun letters
-		{regexp.MustCompile(`\bal-([tṭdḍrzsṣshnjl])`), "a$1-$1", "sun letters"},
-		
-		// Fix wa- connections
-		{regexp.MustCompile(`\bwa([aáiuūíē])`), "wa-$1", "wa + vowel"},
-		{regexp.MustCompile(`\bwa([bcdfghjklmnpqrstvwxyz])`), "wa-$1", "wa + consonant"},
-		
-		// Fix common phrases
-		{regexp.MustCompile(`\blá\s+iláha\s+illá\b`), "lá iláha illá", "no god but"},
-		{regexp.MustCompile(`\bAllāh\b`), "Alláh", "Allah"},
-		
-		// Fix Persian ezafe
-		{regexp.MustCompile(`\b(\w+)-i\s+(\w+)`), "$1-i $2", "ezafe connection"},
-		
-		// Clean up spacing
-		{regexp.MustCompile(`\s+`), " ", "normalize spaces"},
-		{regexp.MustCompile(`\s*-\s*`), "-", "normalize hyphens"},
-		
-		// Fix capitalization
-		{regexp.MustCompile(`\b([a-z])`), "${1}", "word boundaries"},
+	
+	for _, rule := range rules {
+		t.postProcessors = append(t.postProcessors, postProcessor{
+			regex:       regexp.MustCompile(rule.pattern),
+			replacement: rule.replacement,
+			description: rule.description,
+		})
 	}
 }
 
 // Transliterate converts Arabic or Persian text to Bahai transliteration
 func (t *Transliterator) Transliterate(text string, lang Language) string {
-	// Preserve formatting markers
+	// Preserve formatting
 	text = t.preserveFormatting(text)
 	
-	// Handle multi-word phrases first
+	// Handle multi-word phrases
 	text = t.handlePhrases(text, lang)
 	
-	// Split into words and process each
+	// Process word by word
 	words := strings.Fields(text)
 	var result []string
 	
@@ -325,6 +263,7 @@ func (t *Transliterator) Transliterate(text string, lang Language) string {
 	return strings.TrimSpace(output)
 }
 
+// preserveFormatting handles markdown and other formatting
 func (t *Transliterator) preserveFormatting(text string) string {
 	// Handle markdown headers
 	text = regexp.MustCompile(`^(#{1,6})\s*`).ReplaceAllString(text, "$1 ")
@@ -333,54 +272,82 @@ func (t *Transliterator) preserveFormatting(text string) string {
 	text = regexp.MustCompile(`\*\s*\(`).ReplaceAllString(text, "*(")
 	text = regexp.MustCompile(`\)\s*\*`).ReplaceAllString(text, ")*")
 	
-	// Handle quotes
-	text = regexp.MustCompile(`"\s*"`).ReplaceAllString(text, `""`)
-	
 	return text
 }
 
+// handlePhrases processes common multi-word phrases
 func (t *Transliterator) handlePhrases(text string, lang Language) string {
+	var dict *Dictionary
 	if lang == Arabic {
-		// Handle "يا إلهي" specifically
-		text = regexp.MustCompile(`يا\s+إِلهِي`).ReplaceAllString(text, "{{YA_ILAHI}}")
-		text = regexp.MustCompile(`يا\s+إلهي`).ReplaceAllString(text, "{{YA_ILAHI}}")
+		dict = t.arabicDict
+	} else {
+		dict = t.persianDict
 	}
+	
+	// Process common phrases if available
+	if dict.CommonPhrases != nil {
+		for phrase, entry := range dict.CommonPhrases {
+			// Create a regex pattern for the phrase
+			pattern := regexp.MustCompile(`\b` + regexp.QuoteMeta(phrase) + `\b`)
+			text = pattern.ReplaceAllString(text, "{{PHRASE:"+entry.Transliteration+"}}")
+		}
+	}
+	
+	// Handle specific Arabic phrases
+	if lang == Arabic {
+		text = regexp.MustCompile(`يا\s+إِلهِي`).ReplaceAllString(text, "{{PHRASE:yá Iláhí,}}")
+		text = regexp.MustCompile(`يا\s+إلهي`).ReplaceAllString(text, "{{PHRASE:yá Iláhí,}}")
+		text = regexp.MustCompile(`في\s+هذا\s+الحين`).ReplaceAllString(text, "{{PHRASE:fí hádhá'l-ḥíni}}")
+		text = regexp.MustCompile(`أنت\s+المهيمن\s+القيوم`).ReplaceAllString(text, "{{PHRASE:anta'l-Muhayminu'l-Qayyúm}}")
+	}
+	
 	return text
 }
 
+// transliterateWord processes a single word
 func (t *Transliterator) transliterateWord(word string, lang Language) string {
-	// Handle special phrase tokens first
-	if word == "{{YA_ILAHI}}" {
-		return "Yá Iláhí,"
+	// Handle phrase tokens
+	if strings.HasPrefix(word, "{{PHRASE:") && strings.HasSuffix(word, "}}") {
+		return strings.TrimSuffix(strings.TrimPrefix(word, "{{PHRASE:"), "}}")
 	}
 	
-	// Handle pure formatting
+	// Handle pure formatting (no Arabic/Persian script)
 	if !t.containsArabicScript(word) {
 		return word
 	}
 	
-	// Check for complete word matches first
-	var wordMap map[string]string
+	// Get appropriate dictionary
+	var dict *Dictionary
 	var letterMap map[rune]string
 	
 	if lang == Persian {
-		wordMap = t.persianWords
+		dict = t.persianDict
 		letterMap = t.persianLetters
 	} else {
-		wordMap = t.arabicWords
+		dict = t.arabicDict
 		letterMap = t.arabicLetters
 	}
 	
-	// Clean word for lookup (remove diacritics)
+	// Check for complete word matches
 	cleanWord := t.removeDiacritics(word)
-	if translation, exists := wordMap[cleanWord]; exists {
-		return translation
+	
+	// Check common words
+	if entry, exists := dict.CommonWords[cleanWord]; exists {
+		return entry.Transliteration
 	}
 	
-	// Transliterate letter by letter with context
-	return t.transliterateLetter(word, letterMap)
+	// Check divine names
+	if dict.DivineNames != nil {
+		if entry, exists := dict.DivineNames[cleanWord]; exists {
+			return entry.Transliteration
+		}
+	}
+	
+	// Apply heuristic transliteration
+	return t.applyHeuristics(word, letterMap, dict)
 }
 
+// containsArabicScript checks if text contains Arabic/Persian script
 func (t *Transliterator) containsArabicScript(text string) bool {
 	for _, r := range text {
 		if r >= 0x0600 && r <= 0x06FF {
@@ -390,14 +357,12 @@ func (t *Transliterator) containsArabicScript(text string) bool {
 	return false
 }
 
+// removeDiacritics strips diacritical marks from text
 func (t *Transliterator) removeDiacritics(text string) string {
 	var result strings.Builder
 	for _, r := range text {
 		// Skip diacritics
-		if r >= 0x064B && r <= 0x065F {
-			continue
-		}
-		if r == 0x0670 { // alif khanjariya
+		if r >= 0x064B && r <= 0x065F || r == 0x0670 {
 			continue
 		}
 		result.WriteRune(r)
@@ -405,7 +370,8 @@ func (t *Transliterator) removeDiacritics(text string) string {
 	return result.String()
 }
 
-func (t *Transliterator) transliterateLetter(word string, letterMap map[rune]string) string {
+// applyHeuristics applies rule-based transliteration for unknown words
+func (t *Transliterator) applyHeuristics(word string, letterMap map[rune]string, dict *Dictionary) string {
 	var result strings.Builder
 	runes := []rune(word)
 	
@@ -420,47 +386,59 @@ func (t *Transliterator) transliterateLetter(word string, letterMap map[rune]str
 		
 		// Handle letters
 		if trans, exists := letterMap[r]; exists {
-			// Special handling for alif at beginning
-			if r == 'ا' && i == 0 {
-				// Check if it should be 'I' for divine names
-				if t.isBeginningOfDivineName(word) {
-					result.WriteString("I")
-				} else {
-					result.WriteString(trans)
-				}
+			// Special handling for initial alif
+			if r == 'ا' && i == 0 && t.isBeginningOfDivineName(word) {
+				result.WriteString("I")
 			} else {
 				result.WriteString(trans)
 			}
 		} else if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			// Unknown Arabic letter, keep as is
+			// Unknown letter, keep as-is
 			result.WriteRune(r)
 		} else {
-			// Punctuation, keep as is
+			// Punctuation, keep as-is
 			result.WriteRune(r)
 		}
 	}
 	
-	return result.String()
+	// Apply vowel insertion heuristics
+	return t.insertVowels(result.String(), dict)
 }
 
+// isBeginningOfDivineName checks if word starts a divine name
 func (t *Transliterator) isBeginningOfDivineName(word string) bool {
 	clean := t.removeDiacritics(word)
 	return clean == "إلهي" || clean == "الله" || strings.HasPrefix(clean, "إله")
 }
 
+// insertVowels applies vowel insertion heuristics
+func (t *Transliterator) insertVowels(text string, dict *Dictionary) string {
+	// Simple heuristic: insert 'a' between consonant clusters
+	result := regexp.MustCompile(`([bcdfghjklmnpqrstvwxyz])([bcdfghjklmnpqrstvwxyz])`).ReplaceAllStringFunc(text, func(match string) string {
+		runes := []rune(match)
+		if len(runes) == 2 {
+			return string(runes[0]) + "a" + string(runes[1])
+		}
+		return match
+	})
+	
+	return result
+}
+
+// postProcess applies final cleanup and formatting
 func (t *Transliterator) postProcess(text string, lang Language) string {
 	result := text
 	
-	// Apply pattern rules
-	for _, pattern := range t.patterns {
-		result = pattern.regex.ReplaceAllString(result, pattern.replacement)
+	// Apply post-processing rules
+	for _, processor := range t.postProcessors {
+		result = processor.regex.ReplaceAllString(result, processor.replacement)
 	}
 	
 	// Language-specific post-processing
-	if lang == Persian {
-		result = t.postProcessPersian(result)
-	} else {
+	if lang == Arabic {
 		result = t.postProcessArabic(result)
+	} else {
+		result = t.postProcessPersian(result)
 	}
 	
 	// Final cleanup
@@ -469,60 +447,29 @@ func (t *Transliterator) postProcess(text string, lang Language) string {
 	return result
 }
 
-func (t *Transliterator) postProcessPersian(text string) string {
-	// Handle Persian-specific patterns
-	text = regexp.MustCompile(`\bmí\s+`).ReplaceAllString(text, "mí-")
-	text = regexp.MustCompile(`\bkhváhad\s+`).ReplaceAllString(text, "kháhad ")
-	
-	return text
-}
-
+// postProcessArabic handles Arabic-specific post-processing
 func (t *Transliterator) postProcessArabic(text string) string {
-	// Handle Arabic-specific patterns
-	text = regexp.MustCompile(`\bwa\s+`).ReplaceAllString(text, "wa-")
-	text = regexp.MustCompile(`\bbi\s+`).ReplaceAllString(text, "bi-")
+	// Fix common Arabic patterns
+	text = regexp.MustCompile(`\banta\s+al-`).ReplaceAllString(text, "anta'l-")
+	text = regexp.MustCompile(`\banta'l-Mu'ṭí\s+al-'Alím\s+al-Ḥakím`).ReplaceAllString(text, "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím")
 	
-	// Fix specific article contractions
-	text = regexp.MustCompile(`\bfí\s+ad-`).ReplaceAllString(text, "fí'd-")
-	text = regexp.MustCompile(`\bwa\s+al-`).ReplaceAllString(text, "wa'l-")
-	text = regexp.MustCompile(`\bwa\s+á`).ReplaceAllString(text, "wa'l-á")
-	
-	// Fix wa-ḥubbuka specifically
-	text = regexp.MustCompile(`\bwaḥubuka\b`).ReplaceAllString(text, "wa-ḥubbuka")
-	
-	// Fix specific divine name capitalizations
+	// Fix divine name capitalizations
 	text = regexp.MustCompile(`\bal-mu'ṭí\b`).ReplaceAllString(text, "al-Mu'ṭí")
-	text = regexp.MustCompile(`\bálmu'ṭi\b`).ReplaceAllString(text, "al-Mu'ṭí")
 	text = regexp.MustCompile(`\bal-'alím\b`).ReplaceAllString(text, "al-'Alím")
 	text = regexp.MustCompile(`\bal-ḥakím\b`).ReplaceAllString(text, "al-Ḥakím")
-	text = regexp.MustCompile(`\bálḥakiymu\b`).ReplaceAllString(text, "al-Ḥakím")
-	
-	// Fix article + divine name combinations
-	text = regexp.MustCompile(`\banta\s+al-`).ReplaceAllString(text, "anta'l-")
-	text = regexp.MustCompile(`\banta\s+álmu'ṭi`).ReplaceAllString(text, "anta'l-Mu'ṭí")
-	text = regexp.MustCompile(`\banta'l-Mu'ṭí\s+al-'Alím\s+álḥakiymu`).ReplaceAllString(text, "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím")
-	text = regexp.MustCompile(`\banta'l-Mu'ṭí\s+al-'Alím\s+al-ḥakím`).ReplaceAllString(text, "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím")
-	
-	// Fix double vowels
-	text = regexp.MustCompile(`aa+`).ReplaceAllString(text, "a")
-	text = regexp.MustCompile(`áá+`).ReplaceAllString(text, "á")
-	text = regexp.MustCompile(`ii+`).ReplaceAllString(text, "i")
-	text = regexp.MustCompile(`uu+`).ReplaceAllString(text, "u")
-	text = regexp.MustCompile(`ūū+`).ReplaceAllString(text, "ū")
-	text = regexp.MustCompile(`íí+`).ReplaceAllString(text, "í")
-	text = regexp.MustCompile(`ēē+`).ReplaceAllString(text, "ē")
-	
-	// Fix 'iy suffix to 'í
-	text = regexp.MustCompile(`([aáiuūíē])'?iy\b`).ReplaceAllString(text, "$1'í")
-	text = regexp.MustCompile(`\bmu'iyniy\b`).ReplaceAllString(text, "mu'íní")
-	
-	// Fix ending issues
-	text = regexp.MustCompile(`\bálákhirahi\b`).ReplaceAllString(text, "al-ákhirati")
-	text = regexp.MustCompile(`\bwa-álákhirahi\b`).ReplaceAllString(text, "wa'l-ákhirati")
 	
 	return text
 }
 
+// postProcessPersian handles Persian-specific post-processing
+func (t *Transliterator) postProcessPersian(text string) string {
+	// Fix Persian-specific patterns
+	text = regexp.MustCompile(`\btú'í\b`).ReplaceAllString(text, "tú'í")
+	
+	return text
+}
+
+// finalCleanup applies final formatting fixes
 func (t *Transliterator) finalCleanup(text string) string {
 	// Fix capitalization at sentence beginnings
 	text = regexp.MustCompile(`(^|\. +)([a-z])`).ReplaceAllStringFunc(text, func(match string) string {
