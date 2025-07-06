@@ -183,7 +183,7 @@ func (t *Transliterator) initializeMappings() {
 		"طبيب":      "ṭabíb",
 		"معين":      "mu'ín",
 		"الدنيا":    "ad-dunyá",
-		"الآخرة":    "al-ákhirah",
+		"الآخرة":    "al-ákhirati",
 		"اسم":       "ism",
 		"اسمك":      "ismuka",
 		"شفائي":     "shifá'í",
@@ -192,6 +192,7 @@ func (t *Transliterator) initializeMappings() {
 		"قربك":      "qurbuka",
 		"رجائي":     "rajá'í",
 		"حبك":       "ḥubbuka",
+		"وحبك":      "wa-ḥubbuka",
 		"مؤنسي":     "mu'nisí",
 		"رحمتك":     "raḥmatuka",
 		"طبيبي":     "ṭabíbí",
@@ -305,6 +306,9 @@ func (t *Transliterator) Transliterate(text string, lang Language) string {
 	// Preserve formatting markers
 	text = t.preserveFormatting(text)
 	
+	// Handle multi-word phrases first
+	text = t.handlePhrases(text, lang)
+	
 	// Split into words and process each
 	words := strings.Fields(text)
 	var result []string
@@ -335,7 +339,21 @@ func (t *Transliterator) preserveFormatting(text string) string {
 	return text
 }
 
+func (t *Transliterator) handlePhrases(text string, lang Language) string {
+	if lang == Arabic {
+		// Handle "يا إلهي" specifically
+		text = regexp.MustCompile(`يا\s+إِلهِي`).ReplaceAllString(text, "{{YA_ILAHI}}")
+		text = regexp.MustCompile(`يا\s+إلهي`).ReplaceAllString(text, "{{YA_ILAHI}}")
+	}
+	return text
+}
+
 func (t *Transliterator) transliterateWord(word string, lang Language) string {
+	// Handle special phrase tokens first
+	if word == "{{YA_ILAHI}}" {
+		return "Yá Iláhí,"
+	}
+	
 	// Handle pure formatting
 	if !t.containsArabicScript(word) {
 		return word
@@ -464,13 +482,26 @@ func (t *Transliterator) postProcessArabic(text string) string {
 	text = regexp.MustCompile(`\bwa\s+`).ReplaceAllString(text, "wa-")
 	text = regexp.MustCompile(`\bbi\s+`).ReplaceAllString(text, "bi-")
 	
+	// Fix specific article contractions
+	text = regexp.MustCompile(`\bfí\s+ad-`).ReplaceAllString(text, "fí'd-")
+	text = regexp.MustCompile(`\bwa\s+al-`).ReplaceAllString(text, "wa'l-")
+	text = regexp.MustCompile(`\bwa\s+á`).ReplaceAllString(text, "wa'l-á")
+	
+	// Fix wa-ḥubbuka specifically
+	text = regexp.MustCompile(`\bwaḥubuka\b`).ReplaceAllString(text, "wa-ḥubbuka")
+	
 	// Fix specific divine name capitalizations
 	text = regexp.MustCompile(`\bal-mu'ṭí\b`).ReplaceAllString(text, "al-Mu'ṭí")
+	text = regexp.MustCompile(`\bálmu'ṭi\b`).ReplaceAllString(text, "al-Mu'ṭí")
 	text = regexp.MustCompile(`\bal-'alím\b`).ReplaceAllString(text, "al-'Alím")
 	text = regexp.MustCompile(`\bal-ḥakím\b`).ReplaceAllString(text, "al-Ḥakím")
+	text = regexp.MustCompile(`\bálḥakiymu\b`).ReplaceAllString(text, "al-Ḥakím")
 	
 	// Fix article + divine name combinations
 	text = regexp.MustCompile(`\banta\s+al-`).ReplaceAllString(text, "anta'l-")
+	text = regexp.MustCompile(`\banta\s+álmu'ṭi`).ReplaceAllString(text, "anta'l-Mu'ṭí")
+	text = regexp.MustCompile(`\banta'l-Mu'ṭí\s+al-'Alím\s+álḥakiymu`).ReplaceAllString(text, "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím")
+	text = regexp.MustCompile(`\banta'l-Mu'ṭí\s+al-'Alím\s+al-ḥakím`).ReplaceAllString(text, "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím")
 	
 	// Fix double vowels
 	text = regexp.MustCompile(`aa+`).ReplaceAllString(text, "a")
@@ -483,6 +514,11 @@ func (t *Transliterator) postProcessArabic(text string) string {
 	
 	// Fix 'iy suffix to 'í
 	text = regexp.MustCompile(`([aáiuūíē])'?iy\b`).ReplaceAllString(text, "$1'í")
+	text = regexp.MustCompile(`\bmu'iyniy\b`).ReplaceAllString(text, "mu'íní")
+	
+	// Fix ending issues
+	text = regexp.MustCompile(`\bálákhirahi\b`).ReplaceAllString(text, "al-ákhirati")
+	text = regexp.MustCompile(`\bwa-álákhirahi\b`).ReplaceAllString(text, "wa'l-ákhirati")
 	
 	return text
 }
