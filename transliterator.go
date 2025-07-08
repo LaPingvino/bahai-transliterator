@@ -394,6 +394,9 @@ func (t *Transliterator) basicHeuristic(word string, letterMap map[rune]string) 
 		// Handle letters
 		if trans, exists := letterMap[r]; exists {
 			result.WriteString(trans)
+		} else if t.containsArabicScript(string(r)) {
+			// Skip unmapped Arabic/Persian characters to prevent mixed output
+			continue
 		} else if unicode.IsLetter(r) || unicode.IsDigit(r) {
 			result.WriteRune(r)
 		} else {
@@ -411,8 +414,11 @@ func (t *Transliterator) insertStatisticalVowels(consonantString string) string 
 		return consonantString
 	}
 	
+	// First, clean any remaining Arabic characters
+	cleanedString := t.cleanArabicCharacters(consonantString)
+	
 	// Statistical vowel insertion rules based on common Arabic/Persian patterns
-	runes := []rune(consonantString)
+	runes := []rune(cleanedString)
 	var result strings.Builder
 	
 	for i, r := range runes {
@@ -514,6 +520,87 @@ func (t *Transliterator) containsArabicScript(word string) bool {
 		}
 	}
 	return false
+}
+
+// cleanArabicCharacters removes any remaining Arabic characters and replaces them with appropriate Latin equivalents
+func (t *Transliterator) cleanArabicCharacters(text string) string {
+	// Define mappings for common Arabic characters that might leak through
+	arabicToLatin := map[rune]string{
+		'ی': "i",     // Persian ye
+		'ا': "a",     // Alif
+		'ع': "'",     // Ain
+		'ح': "h",     // Ha
+		'خ': "kh",    // Kha
+		'د': "d",     // Dal
+		'ذ': "dh",    // Dhal
+		'ر': "r",     // Ra
+		'ز': "z",     // Zay
+		'س': "s",     // Sin
+		'ش': "sh",    // Shin
+		'ص': "s",     // Sad
+		'ض': "d",     // Dad
+		'ط': "t",     // Ta
+		'ظ': "z",     // Za
+		'غ': "gh",    // Ghain
+		'ف': "f",     // Fa
+		'ق': "q",     // Qaf
+		'ک': "k",     // Kaf
+		'گ': "g",     // Gaf (Persian)
+		'ل': "l",     // Lam
+		'م': "m",     // Meem
+		'ن': "n",     // Noon
+		'ه': "h",     // He
+		'و': "w",     // Waw
+		'ء': "'",     // Hamza
+		'ؤ': "u'",    // Waw with hamza
+		'ئ': "i'",    // Ya with hamza
+		'ة': "h",     // Ta marbuta
+		'آ': "a",     // Alif with madda
+		'أ': "a",     // Alif with hamza above
+		'إ': "i",     // Alif with hamza below
+		'ژ': "zh",    // Zhe (Persian)
+		'چ': "ch",    // Che (Persian)
+		'پ': "p",     // Pe (Persian)
+		'ڤ': "v",     // Ve (Persian)
+		'َ': "a",     // Fatha
+		'ِ': "i",     // Kasra
+		'ُ': "u",     // Damma
+		'ً': "an",    // Tanween fath
+		'ٍ': "in",    // Tanween kasr
+		'ٌ': "un",    // Tanween damm
+		'ْ': "",      // Sukun
+		'ّ': "",      // Shadda
+		'ٰ': "a",     // Alif khanjariya
+		'ـ': "",      // Tatweel (Arabic extension character)
+		'،': ",",     // Arabic comma
+		'؛': ";",     // Arabic semicolon
+		'؟': "?",     // Arabic question mark
+		'۰': "0",     // Persian-Arabic digit zero
+		'۱': "1",     // Persian-Arabic digit one
+		'۲': "2",     // Persian-Arabic digit two
+		'۳': "3",     // Persian-Arabic digit three
+		'۴': "4",     // Persian-Arabic digit four
+		'۵': "5",     // Persian-Arabic digit five
+		'۶': "6",     // Persian-Arabic digit six
+		'۷': "7",     // Persian-Arabic digit seven
+		'۸': "8",     // Persian-Arabic digit eight
+		'۹': "9",     // Persian-Arabic digit nine
+		'ۀ': "h",     // Yeh with hamza above (Persian)
+	}
+
+	var result strings.Builder
+	for _, r := range text {
+		if replacement, exists := arabicToLatin[r]; exists {
+			result.WriteString(replacement)
+		} else if t.containsArabicScript(string(r)) {
+			// Skip unmapped Arabic characters
+			continue
+		} else {
+			result.WriteRune(r)
+		}
+	}
+
+	return result.String()
 }
 
 // removeDiacritics removes diacritical marks for dictionary lookup
