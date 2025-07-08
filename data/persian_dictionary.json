@@ -515,6 +515,251 @@
       "transliteration": "tū'ī",
       "category": "pronoun",
       "notes": "You are"
+    },
+    "شهادت": {
+      "transliteration": "shahādaat",
+      "category": "noun",
+      "notes": "Testimony, witness"
+    },
+    "می‌دهد": {
+      "transliteration": "mí-dihad",
+      "category": "verb",
+      "notes": "Gives, bears"
+    },
+    "بوده‌ای": {
+      "transliteration": "búdih-í",
+      "category": "verb",
+      "notes": "You have been"
+    },
+    "نبوده": {
+      "transliteration": "nabúdih",
+      "category": "verb",
+      "notes": "Has not been"
+    },
+    "نخواهد": {
+      "transliteration": "nakhváhad",
+      "category": "auxiliary_verb",
+      "notes": "Will not"
+    },
+    "خواهد": {
+      "transliteration": "kháhad",
+      "category": "auxiliary_verb",
+      "notes": "Will"
+    },
+    "جمیع": {
+      "transliteration": "jamí'",
+      "category": "quantifier",
+      "notes": "All"
+    },
+    "السن": {
+      "transliteration": "alsun",
+      "category": "noun",
+      "notes": "Tongues"
+    },
+    "وصفت": {
+      "transliteration": "waṣfat",
+      "category": "noun",
+      "notes": "Your description"
+    },
+    "عاجز": {
+      "transliteration": "'ájiz",
+      "category": "adjective",
+      "notes": "Unable"
+    },
+    "قلوب": {
+      "transliteration": "qulúb",
+      "category": "noun",
+      "notes": "Hearts"
+    },
+    "عرفانت": {
+      "transliteration": "'irfánat",
+      "category": "noun",
+      "notes": "Your gnosis"
+    },
+    "قاصر": {
+      "transliteration": "qáṣir",
+      "category": "adjective",
+      "notes": "Unable, insufficient"
+    },
+    "عجز": {
+      "transliteration": "'ajz",
+      "category": "noun",
+      "notes": "Helplessness"
+    },
+    "فقر": {
+      "transliteration": "faqr",
+      "category": "noun",
+      "notes": "Poverty"
+    },
+    "فنا": {
+      "transliteration": "faná",
+      "category": "noun",
+      "notes": "Extinction"
+    },
+    "فنای": {
+      "transliteration": "faná-yi",
+      "category": "noun",
+      "notes": "Extinction of"
+    },
+    "خود": {
+      "transliteration": "khud",
+      "category": "pronoun",
+      "notes": "Self"
+    },
+    "مشاهده": {
+      "transliteration": "musháhidih",
+      "category": "noun",
+      "notes": "Observation"
+    },
+    "می‌نمائی": {
+      "transliteration": "mí-namá'í",
+      "category": "verb",
+      "notes": "You show"
+    },
+    "سائلی": {
+      "transliteration": "sá'ilí",
+      "category": "noun",
+      "notes": "A supplicant"
+    },
+    "ارادۀ": {
+      "transliteration": "irádiy",
+      "category": "noun",
+      "notes": "Will, intention"
+    },
+    "باب": {
+      "transliteration": "báb",
+      "category": "noun",
+      "notes": "Gate, door"
+    },
+    "نموده": {
+      "transliteration": "namúdih",
+      "category": "verb",
+      "notes": "Has done/made"
+    },
+    "فقیری": {
+      "transliteration": "faqírí",
+      "category": "noun",
+      "notes": "A poor one"
+    },
+    "قصد": {
+      "transliteration": "qaṣad",
+      "category": "noun",
+      "notes": "Intention"
+    },
+    "دریای": {
+      "transliteration": "daryá-yi",
+      "category": "noun",
+      "notes": "Ocean of"
+    },
+    "غنای": {
+      "transliteration": "ghaná-yi",
+      "category": "noun",
+      "notes": "Wealth of"
+    },
+    "کرده": {
+      "transliteration": "kardih",
+      "category": "verb",
+      "notes": "Has done"
+    },
+    "دوام": {
+      "transliteration": "davám",
+      "category": "noun",
+      "notes": "Duration"
+    },
+    "باقی": {
+      "transliteration": "báqí",
+      "category": "adjective",
+      "notes": "Remaining"
+    },
+    "پاینده": {
+      "transliteration": "páyindih",
+      "category": "adjective",
+      "notes": "Enduring"
+    },
+    "مسکینی": {
+      "transliteration": "miskíní",
+      "category": "noun",
+      "notes": "A poor one"
+    },
+    "غنایت": {
+      "transliteration": "ghanáyat",
+      "category": "noun",
+      "notes": "Your wealth"
+    },
+    "توجه": {
+      "transliteration": "tavahjuh",
+      "category": "noun",
+      "notes": "Attention"
+    },
+    "ذیل": {
+      "transliteration": "dhayl",
+      "category": "noun",
+      "notes": "Hem"
+    },
+    "کرمت": {
+      "transliteration": "karamat",
+      "category": "noun",
+      "notes": "Your kindness"
+    },
+    "اقبال": {
+      "transliteration": "iqbál",
+      "category": "noun",
+      "notes": "Approach"
+    },
+    "محروم": {
+      "transliteration": "maḥrúm",
+      "category": "adjective",
+      "notes": "Deprived"
+    },
+    "منما": {
+      "transliteration": "manmá",
+      "category": "verb",
+      "notes": "Do not make"
+    },
+    "فضّال": {
+      "transliteration": "faḍḍál",
+      "category": "adjective",
+      "notes": "Bountiful"
+    },
+    "ذرّات": {
+      "transliteration": "dharrát",
+      "category": "noun",
+      "notes": "Atoms"
+    },
+    "کائنات": {
+      "transliteration": "ká'ínát",
+      "category": "noun",
+      "notes": "Existence"
+    },
+    "فضلت": {
+      "transliteration": "faḍlat",
+      "category": "noun",
+      "notes": "Your grace"
+    },
+    "داده": {
+      "transliteration": "dádih",
+      "category": "verb",
+      "notes": "Has given"
+    },
+    "بخشنده‌ای": {
+      "transliteration": "bakhshindih-í",
+      "category": "adjective",
+      "notes": "A forgiver"
+    },
+    "ممکنات": {
+      "transliteration": "mumkínát",
+      "category": "noun",
+      "notes": "Possibilities"
+    },
+    "بخششت": {
+      "transliteration": "bakhshishat",
+      "category": "noun",
+      "notes": "Your forgiveness"
+    },
+    "اعتراف": {
+      "transliteration": "i'tiráf",
+      "category": "noun",
+      "notes": "Confession"
     }
   },
   "ezafe_rules": {

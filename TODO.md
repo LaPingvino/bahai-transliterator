@@ -17,30 +17,32 @@
 - **Post-processing Pipeline**: Systematic cleanup and formatting rules
 
 ### 🔄 In Progress
-- **Expanding Test Coverage**: Working through remaining 4 Arabic test cases
+- **Expanding Test Coverage**: Working through remaining 3 Arabic test cases
 - **Dictionary Completion**: Adding missing words identified from test failures
 
 ### ❌ Remaining Work
 
 ## Phase 1: Complete Test Suite (Immediate)
 
-### Arabic Tests (4 remaining)
-1. **Short Obligatory Prayer** - Missing words:
-   - Need to fix duplicate key issue
-   - Add remaining vocabulary from test case 2
-   - Handle line breaks properly (# headers)
+### Arabic Tests (3 remaining)
+1. **Short Prayer (Test Case 1)** - Minor issues:
+   - Missing comma after "Iláhí" 
+   - Complex divine name combination: need "anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím"
 
-2. **Prayer of Gratitude** - Issues:
+2. **Prayer of Gratitude (Test Case 3)** - Issues:
    - Complex divine name combinations
    - Article contractions need work
    - Vowel insertion heuristics need refinement
+   - Capitalization issues
 
-3. **Lawḥ-i-Ahmad Opening** - Issues:
+3. **Lawḥ-i-Ahmad Opening (Test Case 4)** - Issues:
    - Parentheses formatting `*(Lawḥ-i-Aḥmad)*`
    - Complex compound words
    - Proper noun handling
+   - Heuristic transliteration producing garbage
 
-4. **Prayer for Purification** - Issues:
+4. **Prayer for Purification (Test Case 5)** - Issues:
+   - Line break handling
    - Long compound phrases
    - Divine attribute combinations
    - Complex morphological patterns
@@ -154,20 +156,29 @@ From failing tests, need to add:
 - Rollback plan documented and tested
 - Stakeholder approval obtained
 
-## Current Blockers
+## Current Status Update
 
-1. **Duplicate key in fallback dictionary** - needs immediate fix
-2. **Missing vocabulary** - systematic addition needed
-3. **Complex phrase handling** - current tokenization approach has limitations
+### ✅ Major Fixes Completed
+- **Line break preservation**: Fixed regex in post-processing that was removing newlines
+- **Phrase token handling**: Fixed punctuation extraction that was breaking phrase replacement
+- **Dictionary word variants**: Added missing diacritic variants (وغنآئك, القيّوم)
+- **Test Case 2 complete**: All major issues resolved
+
+### 🔄 Current Blockers
+
+1. **Divine name combinations**: Need better compound phrase handling for complex divine names
+2. **Missing vocabulary**: Several compound words still missing from dictionary
+3. **Heuristic transliteration**: Fallback system producing poor results for unknown words
+4. **Persian transliteration**: Fundamentally broken, needs complete revision
 
 ## Next Session Priority
 
-1. Fix duplicate key issue and get test 2 passing
-2. Systematically work through tests 3-5 for Arabic
-3. Begin Persian test implementation
+1. Fix Test Case 1 (minor comma and divine name issues)
+2. Systematically work through Tests 3-5 for Arabic
+3. Begin comprehensive Persian test implementation
 4. Start planning database sampling strategy
 
 ---
 
 *Last updated: 2024-12-19*
-*Status: Phase 1 in progress - 1/10 tests passing*
+*Status: Phase 1 in progress - 2/10 tests passing*

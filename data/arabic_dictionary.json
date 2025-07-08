@@ -245,6 +245,251 @@
     "لوح": {
       "transliteration": "Lawḥ",
       "category": "noun"
+    },
+    "أشكرك": {
+      "transliteration": "ashkuruka",
+      "category": "verb",
+      "notes": "I thank you"
+    },
+    "وأحمدك": {
+      "transliteration": "wa-aḥmaduka",
+      "category": "verb",
+      "notes": "And I praise you"
+    },
+    "حال": {
+      "transliteration": "ḥálin",
+      "category": "noun",
+      "notes": "State, condition"
+    },
+    "الأحوال": {
+      "transliteration": "al-aḥwál",
+      "category": "noun",
+      "notes": "The states"
+    },
+    "النعمة": {
+      "transliteration": "an-ni'mati",
+      "category": "noun",
+      "notes": "The blessing"
+    },
+    "الحمد": {
+      "transliteration": "al-ḥamdu",
+      "category": "noun",
+      "notes": "The praise"
+    },
+    "لك": {
+      "transliteration": "laka",
+      "category": "pronoun",
+      "notes": "For you"
+    },
+    "العالمين": {
+      "transliteration": "al-'álamín",
+      "category": "noun",
+      "notes": "The worlds"
+    },
+    "وفي": {
+      "transliteration": "wa-fí",
+      "category": "preposition",
+      "notes": "And in"
+    },
+    "فقدها": {
+      "transliteration": "faqdihá",
+      "category": "noun",
+      "notes": "Its loss"
+    },
+    "الشكر": {
+      "transliteration": "ash-shukru",
+      "category": "noun",
+      "notes": "The gratitude"
+    },
+    "مقصود": {
+      "transliteration": "Maqṣúda",
+      "category": "noun",
+      "notes": "Desired one"
+    },
+    "العارفين": {
+      "transliteration": "al-'árifín",
+      "category": "noun",
+      "notes": "The knowers"
+    },
+    "هذه": {
+      "transliteration": "hádhihi",
+      "category": "demonstrative",
+      "notes": "This (feminine)"
+    },
+    "ورقة": {
+      "transliteration": "waraqatu",
+      "category": "noun",
+      "notes": "Leaf, page"
+    },
+    "الفردوس": {
+      "transliteration": "al-Firdawsi",
+      "category": "noun",
+      "notes": "Paradise"
+    },
+    "تغني": {
+      "transliteration": "tughanní",
+      "category": "verb",
+      "notes": "Sings"
+    },
+    "أفنان": {
+      "transliteration": "afnáni",
+      "category": "noun",
+      "notes": "Branches"
+    },
+    "سدرة": {
+      "transliteration": "sidrati",
+      "category": "noun",
+      "notes": "Lote tree"
+    },
+    "البقاء": {
+      "transliteration": "al-baqá'i",
+      "category": "noun",
+      "notes": "Eternity"
+    },
+    "بألحان": {
+      "transliteration": "bi-alḥáni",
+      "category": "noun",
+      "notes": "With melodies"
+    },
+    "قدس": {
+      "transliteration": "qudsin",
+      "category": "noun",
+      "notes": "Holiness"
+    },
+    "مليح": {
+      "transliteration": "malíḥin",
+      "category": "adjective",
+      "notes": "Beautiful"
+    },
+    "وتبشر": {
+      "transliteration": "wa-tubashshshiru",
+      "category": "verb",
+      "notes": "And gives glad tidings"
+    },
+    "المخلصين": {
+      "transliteration": "al-mukhlliṣína",
+      "category": "noun",
+      "notes": "The sincere ones"
+    },
+    "جوار": {
+      "transliteration": "jiwári",
+      "category": "noun",
+      "notes": "Proximity"
+    },
+    "والموحدين": {
+      "transliteration": "wa'l-muwaḥḥidína",
+      "category": "noun",
+      "notes": "And those who affirm unity"
+    },
+    "ساحة": {
+      "transliteration": "sáḥati",
+      "category": "noun",
+      "notes": "Court, arena"
+    },
+    "قرب": {
+      "transliteration": "qurbin",
+      "category": "noun",
+      "notes": "Nearness"
+    },
+    "كريم": {
+      "transliteration": "karím",
+      "category": "adjective",
+      "notes": "Noble"
+    },
+    "الأسماء": {
+      "transliteration": "al-Asmá'",
+      "category": "noun",
+      "notes": "The Names"
+    },
+    "أسألك": {
+      "transliteration": "as'aluka",
+      "category": "verb",
+      "notes": "I ask you"
+    },
+    "ببحر": {
+      "transliteration": "bi-baḥri",
+      "category": "noun",
+      "notes": "By the ocean"
+    },
+    "شفائك": {
+      "transliteration": "shifá'ika",
+      "category": "noun",
+      "notes": "Your healing"
+    },
+    "وإشراقات": {
+      "transliteration": "wa-ishráqáti",
+      "category": "noun",
+      "notes": "And illuminations"
+    },
+    "أنوار": {
+      "transliteration": "anwári",
+      "category": "noun",
+      "notes": "Lights"
+    },
+    "نير": {
+      "transliteration": "nayyiri",
+      "category": "adjective",
+      "notes": "Luminous"
+    },
+    "فضلك": {
+      "transliteration": "faḍlika",
+      "category": "noun",
+      "notes": "Your grace"
+    },
+    "وبالاسم": {
+      "transliteration": "wa-bi'l-ismi",
+      "category": "noun",
+      "notes": "And by the name"
+    },
+    "الذي": {
+      "transliteration": "alladhí",
+      "category": "relative",
+      "notes": "Which, that"
+    },
+    "سخرت": {
+      "transliteration": "sakhkharta",
+      "category": "verb",
+      "notes": "You have subjected"
+    },
+    "به": {
+      "transliteration": "bihi",
+      "category": "pronoun",
+      "notes": "By it"
+    },
+    "عبادك": {
+      "transliteration": "'ibádaka",
+      "category": "noun",
+      "notes": "Your servants"
+    },
+    "وبنفوذ": {
+      "transliteration": "wa-bi-nufúdhi",
+      "category": "noun",
+      "notes": "And by the power"
+    },
+    "كلمتك": {
+      "transliteration": "kalimatika",
+      "category": "noun",
+      "notes": "Your word"
+    },
+    "العليا": {
+      "transliteration": "al-'ulyá",
+      "category": "adjective",
+      "notes": "The most high"
+    },
+    "واقتدار": {
+      "transliteration": "wa-iqtidári",
+      "category": "noun",
+      "notes": "And the might"
+    },
+    "قلمك": {
+      "transliteration": "qalamika",
+      "category": "noun",
+      "notes": "Your pen"
+    },
+    "الأعلى": {
+      "transliteration": "al-a'lá",
+      "category": "adjective",
+      "notes": "The most exalted"
     }
   },
   "divine_names": {

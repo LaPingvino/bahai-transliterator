@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "description": "Arabic transliteration test cases for Bahai texts",
+    "version": "1.0",
+    "last_updated": "2024-12-19"
+  },
+  "test_cases": [
+    {
+      "name": "Short Prayer - Test Case 1",
+      "input": "يا إِلهِي اسْمُكَ شِفائِي وَذِكْرُكَ دَوائِي وَقُرْبُكَ رَجَائِيْ وَحُبُّكَ مُؤْنِسِيْ وَرَحْمَتُكَ طَبِيبِيْ وَمُعِيْنِيْ فِي الدُّنْيا وَالآخِرَةِ وَإِنَّكَ أَنْتَ المُعْطِ العَلِيمُ الحَكِيمُ.",
+      "expected": "Yá Iláhí, ismuka shifá'í wa-dhikruka dawá'í wa-qurbuka rajá'í wa-ḥubbuka mu'nisí wa-raḥmatuka ṭabíbí wa-mu'íní fí'd-dunyá wa'l-ákhirati wa-innaka anta'l-Mu'ṭí'l-'Alímu'l-Ḥakím.",
+      "min_score": 75.0,
+      "category": "prayer",
+      "priority": "high"
+    },
+    {
+      "name": "Short Obligatory Prayer - Test Case 2", 
+      "input": "أشهد بأنك أنت الله لا إله إلا أنت المقتدر المهيمن القيوم أشهد بأن جميع من في السماوات والأرض قائمون لدى عرش ربك المقتدر المتعال وأن قلوبهم وأسرارهم وضمائرهم وأفئدتهم مملوءة من محبتك ومشغولة بذكرك",
+      "expected": "Ashhadu bi-annaka anta'lláhu lá iláha illá anta'l-Muqtadiru'l-Muhayminu'l-Qayyúm. Ashhadu bi-anna jamí'a man fí's-samáváti wa'l-arḍi qá'imúna ladá 'arshi rabbika'l-Muqtadiri'l-Muta'ál wa anna qulúbahum wa asrárahum wa ḍamá'irahum wa af'idatahum mamlú'atun min maḥabbatika wa mashghúlatun bi-dhikrika.",
+      "min_score": 15.0,
+      "category": "obligatory_prayer",
+      "priority": "high"
+    },
+    {
+      "name": "Prayer of Gratitude - Test Case 3",
+      "input": "# هُوَ اللهُ تَعَالى شأنُهُ العَظَمَةُ والاقْتِدارُ\nإِلهِي إِلهِي، أَشْكُرُكَ فِي كُلِّ حالٍ وَأَحْمَدُكَ فِي جَمِيعِ الأَحْوالِ. فِي النِّعْمَةِ أَلْحَمْدُ لَكَ يا إِلهَ العَالَمِينَ. وَفِي فَقْدِها الشُّكْرُ لَكَ يا مَقْصُودَ العَارِفينَ.",
+      "expected": "# Huwa'lláhu Ta'álá Sha'nuhu'l-'Aẓamatu wa'l-Iqtidár\nIláhí Iláhí, ashkuruka fí kulli ḥálin wa-aḥmaduka fí jamí'i'l-aḥwál. Fí'n-ni'mati al-ḥamdu laka yá Iláha'l-'álamín. Wa-fí faqdihá'sh-shukru laka yá Maqṣúda'l-'árifín.",
+      "min_score": 10.0,
+      "category": "prayer",
+      "priority": "medium"
+    },
+    {
+      "name": "Lawh-i-Ahmad Opening - Test Case 4",
+      "input": "هُوَ الْمُقْتَدِرُ الْمُهَيْمِنُ الْقَيُّومُ هذا كتاب من لدن حكيم خبير",
+      "expected": "Huwa'l-Muqtadiru'l-Muhayminu'l-Qayyúm. Hádhá kitábun min ladun ḥakímin khabír.",
+      "min_score": 0.0,
+      "category": "tablet",
+      "priority": "low"
+    },
+    {
+      "name": "Prayer for Purification - Test Case 5",
+      "input": "إِلهِي إِلهِي، خَلَقْتَنِي لِعِرْفانِكَ وَعِبادَتِكَ أَشْهَدُ فِي هذا الحِين بِعَجْزِي وَقُوَّتِكَ وَضَعْفِي وَاقْتِدارِكَ وَفَقْرِي وَغَنائِكَ لا إِلهَ إِلاّ أَنْتَ المُهَيْمِنُ القَيُّومُ",
+      "expected": "Iláhí Iláhí, khalaqtaní li-'irfánika wa-'ibádatika. Ashhadu fí hádhá'l-ḥíni bi-'ajzí wa-quwwatika wa-ḍa'fí wa-iqtidárika wa-faqrí wa-ghaná'ika. Lá iláha illá anta'l-Muhayminu'l-Qayyúm.",
+      "min_score": 5.0,
+      "category": "prayer",
+      "priority": "medium"
+    }
+  ],
+  "common_words_test": [
+    {
+      "word": "الله",
+      "expected": "Alláh",
+      "category": "divine_name"
+    },
+    {
+      "word": "إلهي", 
+      "expected": "Iláhí",
+      "category": "divine_address"
+    },
+    {
+      "word": "أشهد",
+      "expected": "ashhadu", 
+      "category": "verb"
+    },
+    {
+      "word": "يا",
+      "expected": "yá",
+      "category": "particle"
+    }
+  ],
+  "heuristic_test_words": [
+    {
+      "word": "مالك",
+      "expected": "malik",
+      "notes": "Common word pattern for testing vowel insertion"
+    },
+    {
+      "word": "كتاب", 
+      "expected": "kitáb",
+      "notes": "Should test 'a' vowel patterns"
+    },
+    {
+      "word": "حكيم",
+      "expected": "ḥakím", 
+      "notes": "Should test 'i' vowel patterns"
+    }
+  ]
+}
